@@ -1,10 +1,9 @@
-// src/mocks/labs/dolphinLab.ts
-// src/pages/api/labs/mock.ts
+// src/app/api/labs/mock/route.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { VirtualLabViewModel } from '@app/types/lab/viewModels';
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<VirtualLabViewModel>
 ) {
