@@ -26,6 +26,10 @@ export default async function LabPage(props: LabPageProps) {
     cache: 'no-store',
   });
 
+  //  const res = await fetch(`http://localhost:4000/api/lab/mock`, {
+  //   cache: 'no-store',
+  // });
+
   if (!res.ok) {
     throw new Error(`Failed to fetch lab ${id}, ${res.text} ${res.status}`);
   }
@@ -38,9 +42,12 @@ export default async function LabPage(props: LabPageProps) {
     maturityLevel: backendData.current_level,
     maturityReachedAt: '', // backend doesn't provide a timestamp — fill if needed
     exitConditions: backendData.exit_conditions.map((c: any) => ({
-      fulfilled: c.is_fullfilled,
+      fulfilled: c.status == 300,
       category: c.category,
       type: c.type,
+      status: c.status,
+      discussion_url: c.discussion_url,
+      tooltip_url: c.tooltip_url,
     })),
     assignedUsers: backendData.assigned_users.map((u: any) => ({
       userId: u.user_id,

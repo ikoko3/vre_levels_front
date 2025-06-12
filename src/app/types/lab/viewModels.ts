@@ -4,6 +4,9 @@ export interface ExitConditionViewModel {
   fulfilled: boolean;
   category: number;
   type: number;
+  status: number;
+  discussion_url: string;
+  tooltip_url?: string;
 }
 
 export interface AssignedUserViewModel {

@@ -1,5 +1,6 @@
 import { VirtualLabViewModel } from '@app/types/lab/viewModels';
-import { exitConditionLabels } from '@app/../constants/exitConditionLabels';
+import { exitConditionLabels } from '../../constants/exitCondition';
+import { exitConditionStatuses } from '../../constants/exitCondition';
 
 type Props = {
   lab: VirtualLabViewModel;
@@ -27,48 +28,108 @@ export default function LabView({ lab }: Props) {
         </section>
 
         {/* Exit Condition Table */}
-        <section className="space-y-2 w-full">
-          <h2 className="text-lg font-semibold">Exit Conditions (Table)</h2>
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr>
-                <th className="text-left p-2 text-gray-600 dark:text-gray-400">Condition</th>
-                <th className="text-left p-2 text-gray-600 dark:text-gray-400">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lab.exitConditions.map((cond, index) => (
-                <tr key={index} className="border-t border-gray-200 dark:border-gray-700">
-                  <td className="p-2">{exitConditionLabels[cond.type]}</td>
-                  <td className="p-2 font-medium">
-                    <span className={cond.fulfilled ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
-                      {cond.fulfilled ? 'Fulfilled' : 'Unfulfilled'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
+       <section className="space-y-2 w-full">
+  <h2 className="text-lg font-semibold">Exit Conditions (Table)</h2>
+  <table className="w-full text-sm border-collapse">
+    <thead>
+      <tr>
+        <th className="text-left p-2 text-gray-600 dark:text-gray-400">Condition</th>
+        <th className="text-left p-2 text-gray-600 dark:text-gray-400">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {lab.exitConditions.map((cond, index) => (
+        <tr key={index} className="border-t border-gray-200 dark:border-gray-700">
+          <td className="p-2">
+            <span className="flex items-center gap-2">
+              {exitConditionLabels[cond.type] ?? `Type ${cond.type}`}
+              {cond.tooltip_url && (
+                <a
+                  href={cond.tooltip_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 text-xs"
+                  title="Learn more"
+                >
+                  ⓘ
+                </a>
+              )}
+              {cond.discussion_url && (
+                <a
+                  href={cond.discussion_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-500 hover:text-indigo-700 text-xs"
+                  title="View discussion"
+                >
+                  💬
+                </a>
+              )}
+            </span>
+          </td>
+          <td className="p-2 font-medium">
+            <span className={cond.fulfilled ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}>
+              {exitConditionStatuses[cond.status]}
+            </span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
 
-        {/* Exit Condition Grid */}
-        <section className="space-y-2 w-full">
-          <h2 className="text-lg font-semibold">Exit Conditions (Cards)</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {lab.exitConditions.map((cond, index) => (
-              <div
-                key={index}
-                className={`border rounded-lg p-3 text-sm flex items-center justify-between
-                ${cond.fulfilled ? 'border-green-300 bg-green-50 dark:bg-green-900/30' : 'border-red-300 bg-red-50 dark:bg-red-900/20'}`}
-              >
-                <span>{exitConditionLabels[cond.type]}</span>
-                <span className={`text-xs font-medium ${cond.fulfilled ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
-                  {cond.fulfilled ? '✓ Fulfilled' : '✗ Unfulfilled'}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+
+{/* Exit Condition Grid */}
+<section className="space-y-2 w-full">
+  <h2 className="text-lg font-semibold">Exit Conditions (Cards)</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {lab.exitConditions.map((cond, index) => (
+      <div
+        key={index}
+        className={`border rounded-lg p-3 text-sm flex items-center justify-between
+        ${cond.fulfilled
+          ? 'border-green-300 bg-green-50 dark:bg-green-900/30'
+          : 'border-orange-300 bg-orange-50 dark:bg-orange-900/20'}`}
+      >
+        <span className="flex items-center gap-2">
+          {exitConditionLabels[cond.type] ?? `Type ${cond.type}`}
+          {cond.tooltip_url && (
+            <a
+              href={cond.tooltip_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-blue-700 text-xs"
+              title="Learn more"
+            >
+              ⓘ
+            </a>
+          )}
+          {cond.discussion_url && (
+            <a
+              href={cond.discussion_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-500 hover:text-indigo-700 text-xs"
+              title="View discussion"
+            >
+              💬
+            </a>
+          )}
+        </span>
+        <span
+          className={`text-xs font-medium ${
+            cond.fulfilled
+              ? 'text-green-700 dark:text-green-400'
+              : 'text-orange-700 dark:text-orange-400'
+          }`}
+        >
+          {exitConditionStatuses[cond.status]}
+        </span>
+      </div>
+    ))}
+  </div>
+</section>
+
 
         {/* Assigned Users */}
         <section className="space-y-2 w-full">
