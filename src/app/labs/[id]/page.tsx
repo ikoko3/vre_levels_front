@@ -1,6 +1,7 @@
 import { VirtualLabViewModel } from '@app/types/lab/viewModels';
 import LabView from '@app/components/LabView';
 
+
 interface LabPageProps {
   params: {
     id: string;
@@ -20,11 +21,14 @@ interface LabPageProps {
 // }
 
 
-export default async function LabPage(props: LabPageProps) {
-  const id = props.params.id;
+
+export default async function LabPage({ params }: LabPageProps) {
+  const id = params.id;
+
   const res = await fetch(`http://localhost:3000/lab/${id}`, {
     cache: 'no-store',
   });
+
 
   //  const res = await fetch(`http://localhost:4000/api/lab/mock`, {
   //   cache: 'no-store',

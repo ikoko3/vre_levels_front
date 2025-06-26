@@ -2,6 +2,7 @@ import { VirtualLabViewModel } from '@app/types/lab/viewModels';
 import { exitConditionLabels } from '../../constants/exitCondition';
 import { exitConditionStatuses } from '../../constants/exitCondition';
 
+
 type Props = {
   lab: VirtualLabViewModel;
 };
