@@ -6,7 +6,7 @@ const RS256_ALG = 'RS256';
 const PUBLIC_PATHS = ['/', '/favicon.ico', '/public', '/api/public'];
 
 export async function middleware(request: NextRequest) {
-
+  return NextResponse.next();
   const { pathname } = request.nextUrl;
 
   if (PUBLIC_PATHS.includes(pathname)) {
