@@ -1,6 +1,7 @@
 // src/types/lab/viewModels.ts
 
 export interface ExitConditionViewModel {
+  id: string;
   fulfilled: boolean;
   category: number;
   type: number;
@@ -16,6 +17,7 @@ export interface AssignedUserViewModel {
 }
 
 export interface VirtualLabViewModel {
+  id: string;
   name: string;
   alias: string;
   maturityLevel: number;

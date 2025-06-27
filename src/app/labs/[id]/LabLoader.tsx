@@ -28,11 +28,13 @@ export default function LabLoader({ id }: { id: string }) {
         const backendData = await res.json();
 
         const lab: VirtualLabViewModel = {
+          id: id,
           name: backendData.name,
           alias: backendData.alias,
           maturityLevel: backendData.current_level,
           maturityReachedAt: '',
           exitConditions: backendData.exit_conditions.map((c: any) => ({
+            id: c.id,
             fulfilled: c.status == 300,
             category: c.category,
             type: c.type,
