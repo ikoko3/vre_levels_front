@@ -1,29 +1,59 @@
 "use client";
 
 import React, { createContext, useEffect, useState } from "react";
-import keycloak from "../lib/keycloak";
+import keycloak from "../lib/auth";
 
 interface AuthContextType {
   keycloak: Keycloak.KeycloakInstance | null;
   initialized: boolean;
+  user: {
+    name: string;
+    email: string;
+    roles: string[];
+  } | null;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   keycloak: null,
   initialized: false,
+  user: null,
+  logout: () => {},
 });
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
+  const [user, setUser] = useState<AuthContextType["user"]>(null);
 
   useEffect(() => {
-    keycloak.init({ onLoad: "login-required" }).then(() => {
-      setInitialized(true);
-    });
+    keycloak
+      .init({ onLoad: "login-required" })
+      .then((authenticated) => {
+        if (authenticated && keycloak.tokenParsed) {
+          const { name, email, realm_access } = keycloak.tokenParsed;
+          setUser({
+            name: name || "Unknown",
+            email: email || "No email",
+            roles: realm_access?.roles || [],
+          });
+        }
+        setInitialized(true);
+      });
   }, []);
 
+  const logout = () => {
+    setUser(null); // clear local state
+    keycloak.logout({ redirectUri: window.location.origin });
+  };
+
   return (
-    <AuthContext.Provider value={{ keycloak, initialized }}>
+    <AuthContext.Provider
+      value={{
+        keycloak,
+        initialized,
+        user,
+        logout,
+      }}
+    >
       {initialized ? children : <div>Loading...</div>}
     </AuthContext.Provider>
   );

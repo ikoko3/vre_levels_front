@@ -16,9 +16,6 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('kc-token')?.value;
 
   if (!token) {
-
-    const redirectAfterLogin = request.nextUrl.pathname;
-
     const loginUrl = new URL(
       'http://localhost:8080/realms/vre/protocol/openid-connect/auth'
     );
@@ -26,7 +23,7 @@ export async function middleware(request: NextRequest) {
     loginUrl.searchParams.set('redirect_uri', 'http://localhost:4000/callback');
     loginUrl.searchParams.set('response_type', 'code');
     loginUrl.searchParams.set('scope', 'openid');
-    loginUrl.searchParams.set('state', encodeURIComponent(redirectAfterLogin)); // preserve path
+    loginUrl.searchParams.set('state', request.nextUrl.pathname); // preserve path
 
 
     return NextResponse.redirect(loginUrl);
@@ -46,7 +43,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Apply middleware only to application routes
-    '/((?!_next/|favicon.ico|callback).*)',
+    // Apply middleware to everything except:
+    // - static files
+    // - public assets
+    // - known unprotected routes
+    '/((?!_next/|favicon.ico|callback|unauthorized|.*\\.svg|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.ico|.*\\.webp|.*\\.css|.*\\.js|.*\\.woff2|.*\\.json).*)',
   ],
 };

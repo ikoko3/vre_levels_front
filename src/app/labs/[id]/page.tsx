@@ -1,5 +1,6 @@
 import { VirtualLabViewModel } from '@app/types/lab/viewModels';
 import LabView from '@app/components/LabView';
+import { cookies } from 'next/headers';
 
 
 interface LabPageProps {
@@ -24,8 +25,13 @@ interface LabPageProps {
 
 export default async function LabPage({ params }: LabPageProps) {
   const id = params.id;
+  const token = (await cookies()).get('kc-token')?.value;
+
 
   const res = await fetch(`http://localhost:3000/lab/${id}`, {
+     headers: {
+      Authorization: `Bearer ${token}`,
+    },
     cache: 'no-store',
   });
 
