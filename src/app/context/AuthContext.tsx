@@ -2,6 +2,7 @@
 
 import React, { createContext, useEffect, useState } from "react";
 import keycloak from "../lib/auth";
+import {initializeRoleCache} from "@app/lib/roles"; 
 
 interface AuthContextType {
   keycloak: Keycloak.KeycloakInstance | null;
@@ -28,12 +29,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
   keycloak
     .init({ onLoad: 'login-required', checkLoginIframe: false })
-    .then((authenticated) => {
+    .then(async (authenticated) => {
       if (authenticated && keycloak.tokenParsed) {
         const { name, email, resource_access } = keycloak.tokenParsed;
 
         const clientRoles =
           resource_access?.['nextjs-frontend']?.roles || []; // ← change this line
+
+        await initializeRoleCache();
 
         setUser({
           name: name || 'Unknown',

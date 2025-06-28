@@ -5,6 +5,8 @@ import { VirtualLabViewModel } from "@app/types/lab/viewModels";
 import ExitConditionCard from "@app/components/ExitConditions/Card";
 import { ExitCondition } from "@app/components/ExitConditions/types";
 import { AuthContext } from "@app/context/AuthContext";
+import AssignedUsers from "@app/components/AssignedUsers"
+
 
 type Props = {
   lab: VirtualLabViewModel;
@@ -51,19 +53,8 @@ export default function LabView({ lab }: Props) {
           </div>
         </section>
 
-        {/* Assigned Users */}
-        <section className="space-y-2 w-full">
-          <h2 className="text-lg font-semibold">Assigned Users</h2>
-          <ul className="list-disc list-inside text-sm space-y-1 text-gray-700 dark:text-gray-300">
-            {lab.assignedUsers.map((user, index) => (
-              <li key={index}>
-                User ID: <code>{user.userId}</code> — Role: <strong>{user.roleCode}</strong>
-                <br />
-                Assigned at: {user.assignedAt ? new Date(user.assignedAt).toLocaleString() : "Unknown"}
-              </li>
-            ))}
-          </ul>
-        </section>
+       <AssignedUsers users={lab.assignedUsers} />
+
       </main>
 
       <footer className="row-start-3 text-xs text-gray-400 dark:text-gray-500 text-center">

@@ -13,7 +13,9 @@ export interface ExitConditionViewModel {
 export interface AssignedUserViewModel {
   userId: string;
   roleCode: string;
+  role: string;
   assignedAt: string;
+  description: string;
 }
 
 export interface VirtualLabViewModel {
