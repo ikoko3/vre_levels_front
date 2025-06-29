@@ -10,12 +10,17 @@ export interface ExitConditionViewModel {
   tooltip_url?: string;
 }
 
+export interface Role {
+  code: string;
+  name: string;
+  description: string;
+}
+
 export interface AssignedUserViewModel {
   userId: string;
-  roleCode: string;
-  role: string;
+  role_codes: [string];
   assignedAt: string;
-  description: string;
+  reference_id: string;
 }
 
 export interface VirtualLabViewModel {

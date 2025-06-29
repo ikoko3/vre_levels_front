@@ -4,7 +4,6 @@ import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '@app/context/AuthContext';
 import LabView from '@app/components/LabView';
 import { VirtualLabViewModel } from '@app/types/lab/viewModels';
-import { getRoleByCode } from '@app/lib/roles';
 
 
 export default function LabLoader({ id }: { id: string }) {
@@ -46,10 +45,10 @@ export default function LabLoader({ id }: { id: string }) {
           })),
           assignedUsers: backendData.assigned_users.map((u: any) => ({
             userId: u.user_id,
-            roleCode: u.role_code,
-            role: getRoleByCode(u.role_code)?.name,
+            role_codes: u.role_codes,
             assignedAt: u.assigned_at,
-            description: u.description,
+            name: u.name,
+            email: u.email
           })),
         };
 

@@ -16,6 +16,12 @@ export default function LabView({ lab }: Props) {
   const { user } = useContext(AuthContext);
   const roles = user?.roles ?? [];
 
+  const vl_user = lab.assignedUsers.find(u => u.reference_id == user?.id);
+  if (vl_user)
+    roles.push(...vl_user?.role_codes);
+
+  console.log(roles);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-[color:var(--background)] text-[color:var(--foreground)]">
       <main className="flex flex-col gap-10 row-start-2 items-center sm:items-start max-w-3xl w-full">
@@ -53,7 +59,7 @@ export default function LabView({ lab }: Props) {
           </div>
         </section>
 
-       <AssignedUsers users={lab.assignedUsers} />
+       <AssignedUsers users={lab.assignedUsers} labId={lab.id} />
 
       </main>
 

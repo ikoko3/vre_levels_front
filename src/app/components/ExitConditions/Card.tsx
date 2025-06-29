@@ -5,7 +5,7 @@ import { ExitConditionCardProps } from "@app/components/ExitConditions/types";
 import { exitConditionLabels, exitConditionStatuses } from "@app/constants/exitCondition";
 
 export default function ExitConditionCard({ cond, labId, userRoles }: ExitConditionCardProps) {
-  const isCoordinator = userRoles.includes("coordinator");
+  const isCoordinator = userRoles.includes("CRD");
 
   const [showEditModal, setShowEditModal] = useState(false);
 

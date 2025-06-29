@@ -11,6 +11,7 @@ interface AuthContextType {
     name: string;
     email: string;
     roles: string[];
+    id: string;
   } | null;
   logout: () => void;
 }
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     .init({ onLoad: 'login-required', checkLoginIframe: false })
     .then(async (authenticated) => {
       if (authenticated && keycloak.tokenParsed) {
-        const { name, email, resource_access } = keycloak.tokenParsed;
+        const { name, email, resource_access, id } = keycloak.tokenParsed;
 
         const clientRoles =
           resource_access?.['nextjs-frontend']?.roles || []; // ← change this line
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           name: name || 'Unknown',
           email: email || 'No email',
           roles: clientRoles,
+          id: id,
         });
       }
 
