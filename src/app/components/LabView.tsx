@@ -2,10 +2,13 @@
 
 import { useContext } from "react";
 import { VirtualLabViewModel } from "@app/types/lab/viewModels";
-import ExitConditionCard from "@app/components/ExitConditions/Card";
 import { ExitCondition } from "@app/components/ExitConditions/types";
 import { AuthContext } from "@app/context/AuthContext";
+
+//Components
+import ExitConditionCard from "@app/components/ExitConditions/Card";
 import AssignedUsers from "@app/components/AssignedUsers"
+import MaturityProgress from "@app/components/MaturityProgress";
 
 
 type Props = {
@@ -26,22 +29,31 @@ export default function LabView({ lab }: Props) {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-[color:var(--background)] text-[color:var(--foreground)]">
       <main className="flex flex-col gap-10 row-start-2 items-center sm:items-start max-w-3xl w-full">
 
-        {/* Title */}
-        <section className="space-y-2">
-          <h1 className="text-2xl font-bold">{lab.name}</h1>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Alias: <span className="bg-black/[.05] dark:bg-white/[.1] px-2 py-1 rounded">{lab.alias}</span>
-          </p>
-        </section>
+        <section className="w-full space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{lab.name}</h1>
+            <a
+              href="https://naavre.net/docs/virtual-labs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Learn more →
+            </a>
+          </div>
+          <div>
+            <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-medium px-3 py-1 rounded-full">
+              Alias: {lab.alias}
+            </span>
+          </div>
+      </section>
 
-        {/* Maturity Info */}
-        <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Current Maturity Level</h2>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Level <strong>{lab.maturityLevel}</strong> reached at:{" "}
-            {lab.maturityReachedAt ? new Date(lab.maturityReachedAt).toLocaleString() : "Unknown"}
-          </p>
-        </section>
+        <MaturityProgress
+            level={lab.maturityLevel}
+            reachedAt={lab.maturityReachedAt}
+            totalConditions={lab.exitConditions.length}
+            fulfilledConditions={lab.exitConditions.filter((c) => c.fulfilled).length}
+          />
 
         {/* Exit Conditions */}
         <section className="space-y-4 w-full">

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/Lab/AssignedUsers.tsx
 
 "use client";
