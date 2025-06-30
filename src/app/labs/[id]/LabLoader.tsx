@@ -41,6 +41,7 @@ export default function LabLoader({ id }: { id: string }) {
             category: c.category,
             type: c.type,
             status: c.status,
+            comments: c.comments,
             discussion_url: c.discussion_url,
             tooltip_url: c.tooltip_url,
           })),

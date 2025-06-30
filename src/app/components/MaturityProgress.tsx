@@ -48,12 +48,19 @@ export default function MaturityProgress({
     [100, 101, 200, 201, 203].includes(levelState) && roles.includes("CRD");
 
   const updateLevel = async (newLevel: number, state: number) => {
-    await fetch(`http://localhost:3000/lab/${labId}/update_level`, {
+    const res = await fetch(`http://localhost:3000/lab/${labId}/update_level`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ level: newLevel, state }),
     });
-    location.reload();
+
+    if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Update failed: ${errorData.error || 'Unknown error'}`);
+    }else{
+
+        location.reload();
+    }
   };
 
   return (

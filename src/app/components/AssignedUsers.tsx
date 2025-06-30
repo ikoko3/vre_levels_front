@@ -70,7 +70,7 @@ export default function AssignedUsers({ users, labId }: Props) {
       if (!res.ok) throw new Error("Assignment failed");
       alert("User assigned successfully.");
       setShowModal(false);
-      router.refresh();
+      location.reload();
     } catch (error) {
       alert("Error assigning user.");
       console.error(error);

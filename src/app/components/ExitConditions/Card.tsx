@@ -8,10 +8,13 @@ export default function ExitConditionCard({ cond, labId, userRoles }: ExitCondit
   const isCoordinator = userRoles.includes("CRD");
 
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
+
 
   // 🔁 Make local display state
   const [status, setStatus] = useState(cond.status);
   const [discussionUrl, setDiscussionUrl] = useState(cond.discussion_url || "");
+  const fulfilled = status === 300;
 
   const [selectedStatus, setSelectedStatus] = useState(cond.status);
   const [comment, setComment] = useState("");
@@ -38,7 +41,6 @@ export default function ExitConditionCard({ cond, labId, userRoles }: ExitCondit
 
       if (!res.ok) throw new Error("Failed to update exit condition");
 
-      // ✅ Update local visible values
       setStatus(selectedStatus);
       setShowEditModal(false);
     } catch (error) {
@@ -50,22 +52,24 @@ export default function ExitConditionCard({ cond, labId, userRoles }: ExitCondit
   return (
     <div
       className={`border rounded-lg p-3 text-sm flex flex-col gap-2 ${
-        cond.fulfilled
+        fulfilled
           ? "border-green-300 bg-green-50 dark:bg-green-900/30"
           : "border-orange-300 bg-orange-50 dark:bg-orange-900/20"
       }`}
     >
-      <div className="flex items-center justify-between">
-        <span className="font-medium">{label}</span>
-        <span
-          className={`text-xs font-semibold ${
-            cond.fulfilled ? "text-green-700 dark:text-green-400" : "text-orange-700 dark:text-orange-400"
-          }`}
-        >
-          {statusLabel}
-        </span>
+      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-sm font-medium">
+        <span className="text-blue-700 dark:text-blue-300">EC{cond.type}</span>
+        <span className="text-gray-800 dark:text-gray-100">{label}</span>
       </div>
-
+      <span
+        className={`text-xs font-semibold ${
+          fulfilled ? "text-green-700 dark:text-green-400" : "text-orange-700 dark:text-orange-400"
+        }`}
+      >
+        {statusLabel}
+      </span>
+    </div>
       <div className="flex justify-between items-center text-xs">
         <div className="flex gap-4">
           {cond.tooltip_url && (
@@ -80,18 +84,28 @@ export default function ExitConditionCard({ cond, labId, userRoles }: ExitCondit
               ⓘ <span className="hidden sm:inline">Details</span>
             </a>
           )}
+          {cond.comments && (
+                  <button
+                  onClick={() => setShowCommentModal(true)}
+                  className="flex items-center gap-1 text-sm text-indigo-600 hover:underline"
+                  title="View comment"
+                >
+                  📝 <span className="hidden sm:inline">Comment</span>
+                </button>
+          )}
+
           {discussionUrl && (
             <a
               href={discussionUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex gap-1 hover:text-indigo-600"
+              className="flex items-center gap-1 text-sm text-indigo-600 hover:underline"
               title="View discussion"
-              aria-label="Discussion thread"
             >
               💬 <span className="hidden sm:inline">Discussion</span>
             </a>
           )}
+          
         </div>
 
         {isCoordinator && (
@@ -103,6 +117,26 @@ export default function ExitConditionCard({ cond, labId, userRoles }: ExitCondit
           </button>
         )}
       </div>
+
+        {showCommentModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xl max-w-sm w-full">
+              <div className="flex justify-between items-center mb-2">
+                <h4 className="font-semibold text-sm">Exit Condition Comment</h4>
+                <button
+                  onClick={() => setShowCommentModal(false)}
+                  className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  ✕
+                </button>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                {cond.comments}
+              </p>
+            </div>
+          </div>
+        )}
+
 
       {showEditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
