@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { VirtualLabViewModel } from "@app/types/lab/viewModels";
 import { ExitCondition } from "@app/components/ExitConditions/types";
 import { AuthContext } from "@app/context/AuthContext";
@@ -17,40 +17,61 @@ type Props = {
 
 export default function LabView({ lab }: Props) {
   const { user } = useContext(AuthContext);
-  const roles = user?.roles ?? [];
 
-  const vl_user = lab.assignedUsers.find(u => u.reference_id == user?.id);
-  if (vl_user)
-    roles.push(...vl_user?.role_codes);
 
-  console.log(roles);
+
+  const roles = useMemo(() => {
+      const keycloakRoles = user?.roles ?? [];
+      const labUser = lab.assignedUsers.find(u => u.reference_id === user?.id);
+      console.log('User', {user, lab, labUser});
+      const labRoles = labUser?.role_codes ?? [];
+      return Array.from(new Set([...keycloakRoles, ...labRoles]));
+  }, [user?.id, user?.roles, lab.assignedUsers]);
+
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-[color:var(--background)] text-[color:var(--foreground)]">
       <main className="flex flex-col gap-10 row-start-2 items-center sm:items-start max-w-3xl w-full">
 
         <section className="w-full space-y-2">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{lab.name}</h1>
-            <a
-              href="https://naavre.net/docs/virtual-labs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Learn more →
-            </a>
-          </div>
-          <div>
-            <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-medium px-3 py-1 rounded-full">
-              Alias: {lab.alias}
-            </span>
-          </div>
-      </section>
+  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="flex-1">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{lab.name}</h1>
+      <div className="mt-1">
+        <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-medium px-3 py-1 rounded-full">
+          Alias: {lab.alias}
+        </span>
+        <a
+        href="https://naavre.net/docs/virtual-labs"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-blue-600 hover:underline self-center"
+      >
+        Learn more →
+      </a>
+      </div>
+    </div>
+
+    <div className="flex gap-2">
+      <a
+        href={`https://staging.demo.naavre.net/vreapp/vlabs/${lab.alias}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-4 py-2 text-sm font-semibold bg-green-600 text-white rounded hover:bg-green-700 transition"
+      >
+        Open in NaaVRE
+      </a>
+      
+    </div>
+  </div>
+</section>
+
 
         <MaturityProgress
+            roles={roles}
+            labId={lab.id}
             level={lab.maturityLevel}
-            reachedAt={lab.maturityReachedAt}
+            levelState={lab.levelState}
             totalConditions={lab.exitConditions.length}
             fulfilledConditions={lab.exitConditions.filter((c) => c.fulfilled).length}
           />

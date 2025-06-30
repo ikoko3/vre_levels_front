@@ -32,6 +32,7 @@ export default function LabLoader({ id }: { id: string }) {
           id: id,
           name: backendData.name,
           alias: backendData.alias,
+          levelState: backendData.level_state,
           maturityLevel: backendData.current_level,
           maturityReachedAt: '',
           exitConditions: backendData.exit_conditions.map((c: any) => ({
@@ -47,6 +48,7 @@ export default function LabLoader({ id }: { id: string }) {
             userId: u.user_id,
             role_codes: u.role_codes,
             assignedAt: u.assigned_at,
+            reference_id: u.reference_id,
             name: u.name,
             email: u.email
           })),

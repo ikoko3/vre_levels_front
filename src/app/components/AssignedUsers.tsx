@@ -47,7 +47,7 @@ export default function AssignedUsers({ users, labId }: Props) {
   const handleAssign = async () => {
     try {
       const userData = users.find((u) => u.userId === selectedUser);
-      const existingRoles = userData?.roleCodes || [];
+      const existingRoles = userData?.role_codes || [];
       const updatedRoles = Array.from(new Set([...existingRoles, selectedRole]));
       const userMeta = availableUsers.find((u) => u._id === selectedUser);
 

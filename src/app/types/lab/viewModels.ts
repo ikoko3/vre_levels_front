@@ -28,6 +28,7 @@ export interface VirtualLabViewModel {
   name: string;
   alias: string;
   maturityLevel: number;
+  levelState: number;
   maturityReachedAt: string;
   exitConditions: ExitConditionViewModel[];
   assignedUsers: AssignedUserViewModel[];
