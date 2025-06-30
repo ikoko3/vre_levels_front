@@ -36,6 +36,7 @@ export default function MaturityProgress({
   const [showEvalModal, setShowEvalModal] = useState(false);
   const [showReevalModal, setShowReevalModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(levelState);
 
   const percentage = totalConditions > 0 ? Math.round((fulfilledConditions / totalConditions) * 100) : 0;
@@ -129,8 +130,32 @@ export default function MaturityProgress({
         <p className="text-sm text-gray-600 dark:text-gray-400">
           Based on your role{roles.length > 1 ? 's' : ''}, you may perform status transitions or submit evaluations.
         </p>
+
+
+      <button
+  onClick={() => setShowHelpModal(true)}
+  className="text-sm text-blue-600 hover:underline ml-2"
+>
+  ℹ️ Learn more about statuses
+</button>
       </div>
 
+        {showHelpModal && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+                <div className="bg-white dark:bg-gray-900 p-6 rounded-lg max-w-lg w-full shadow-xl">
+                <h2 className="text-lg font-semibold mb-2">Lab Status Overview</h2>
+                <p className="text-sm mb-4">Statuses reflect lifecycle stages:</p>
+                <img src="/images/lab_lifecycle.svg" alt="Lab lifecycle diagram" className="rounded border mb-4" />
+                <button
+                    onClick={() => setShowHelpModal(false)}
+                    className="text-sm bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                >
+                    Close
+                </button>
+                </div>
+            </div>
+        )}
+    
       {/* Evaluation Confirmation Modal */}
       {showEvalModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -180,6 +205,10 @@ export default function MaturityProgress({
           </div>
         </div>
       )}
+
+      
     </section>
+
+    
   );
 }

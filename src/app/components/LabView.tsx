@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { VirtualLabViewModel } from "@app/types/lab/viewModels";
 import { ExitCondition } from "@app/components/ExitConditions/types";
 import { AuthContext } from "@app/context/AuthContext";
@@ -17,7 +17,6 @@ type Props = {
 
 export default function LabView({ lab }: Props) {
   const { user } = useContext(AuthContext);
-
 
 
   const roles = useMemo(() => {
@@ -41,14 +40,6 @@ export default function LabView({ lab }: Props) {
         <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-medium px-3 py-1 rounded-full">
           Alias: {lab.alias}
         </span>
-        <a
-        href="https://naavre.net/docs/virtual-labs"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-sm text-blue-600 hover:underline self-center"
-      >
-        Learn more →
-      </a>
       </div>
     </div>
 
@@ -78,7 +69,16 @@ export default function LabView({ lab }: Props) {
 
         {/* Exit Conditions */}
         <section className="space-y-4 w-full">
-          <h2 className="text-lg font-semibold">Exit Conditions</h2>
+          <h2 className="text-lg font-semibold">Exit Conditions <a
+        href="https://naavre.net/docs/readiness_levels/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-blue-600 hover:underline self-center"
+      >
+        ⓘ
+      </a></h2> 
+          <p>These Conditions have to be satisfied to progress the VL to the next maturity level.</p> 
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {lab.exitConditions.map((cond: ExitCondition) => (
               <ExitConditionCard
@@ -90,11 +90,26 @@ export default function LabView({ lab }: Props) {
               />
             ))}
           </div>
+
+            
+              <details className="bg-gray-50 dark:bg-gray-800 rounded p-4 mt-4 text-sm">
+        <summary className="cursor-pointer font-medium text-blue-700 dark:text-blue-300 mb-2">
+          What do the statuses mean for the Exit Conditions?
+        </summary>
+        <p className="mb-2">Each lab level status reflects a stage in the evaluation lifecycle:</p>
+        <img src="/images/exitCondition_kpi.svg" alt="Maturity level flow" className="mt-4 rounded border" />
+
+      </details>
+
+    
         </section>
 
        <AssignedUsers users={lab.assignedUsers} labId={lab.id} />
 
       </main>
+
+
+
 
       <footer className="row-start-3 text-xs text-gray-400 dark:text-gray-500 text-center">
         Data rendered for: {lab.alias}
