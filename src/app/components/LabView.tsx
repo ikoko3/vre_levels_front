@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 import { VirtualLabViewModel } from "@app/types/lab/viewModels";
 import { ExitCondition } from "@app/components/ExitConditions/types";
 import { AuthContext } from "@app/context/AuthContext";

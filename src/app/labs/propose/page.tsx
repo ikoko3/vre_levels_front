@@ -62,7 +62,7 @@ export default function ProposeLabPage() {
       payload.lab_reference = { lab_id: sourceLab, lab_level: Number(sourceLevel) };
     }
 
-    await fetch("http://localhost:3000/request/propose-lab", {
+    await fetch("http://localhost:3000/request/labs/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

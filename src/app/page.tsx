@@ -1,6 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
-//import { useRouter } from "next/navigation";
+import { useEffect, useState, useContext } from "react";
+import { AuthContext } from "@app/context/AuthContext";
+import Link from "next/link";
+
 
 type Lab = {
   id: string;
@@ -19,7 +21,10 @@ const levelColors = [
 
 export default function Home() {
   const [labs, setLabs] = useState<Lab[]>([]);
-  //const router = useRouter();
+  const { user } = useContext(AuthContext);
+  const keycloakRoles = user?.roles ?? [];
+  const can_propose_lab = keycloakRoles.includes('vre_lab_proposer');
+  const is_reviewer = keycloakRoles.includes('vre_lab_reviewer');
 
   useEffect(() => {
     fetch("http://localhost:3000/lab/list")
@@ -46,50 +51,69 @@ export default function Home() {
         </section>
 
         {/* Carousel */}
-       <section className="w-full">
-  <h2 className="text-xl font-semibold mb-4">Explore Virtual Labs</h2>
-  <div className="flex overflow-x-auto gap-4 p-2">
-    <a
-  href="/labs/propose"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="min-w-[200px] border-2 border-dashed border-blue-400 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-left p-4 shadow hover:shadow-md hover:scale-[1.02] active:scale-[.98] transition cursor-pointer"
->
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-xl">➕</span>
-        <h3 className="font-semibold text-lg text-blue-800 dark:text-blue-200">
-          Propose a new lab
-        </h3>
-      </div>
-      <p className="text-xs mt-1 text-gray-700 dark:text-gray-300 italic">
-        Express your interest in creating a new Virtual Lab.
-      </p>
-      <p className="text-xs mt-2 font-mono text-gray-600 dark:text-gray-400">
-        Your proposal will be reviewed.
-      </p>
-    </a>
+        <section className="w-full">
+          <h2 className="text-xl font-semibold mb-4">Explore Virtual Labs</h2>
+          <div className="flex overflow-x-auto gap-4 p-2">
+            {can_propose_lab && (
+              <a
+                href="/labs/propose"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="min-w-[200px] border-2 border-dashed border-blue-400 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-left p-4 shadow hover:shadow-md hover:scale-[1.02] active:scale-[.98] transition cursor-pointer"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xl">➕</span>
+                  <h3 className="font-semibold text-lg text-blue-800 dark:text-blue-200">
+                    Propose a new lab
+                  </h3>
+                </div>
+                <p className="text-xs mt-1 text-gray-700 dark:text-gray-300 italic">
+                  Express your interest in creating a new Virtual Lab.
+                </p>
+                <p className="text-xs mt-2 font-mono text-gray-600 dark:text-gray-400">
+                  Your proposal will be reviewed.
+                </p>
+              </a>
+            )}
 
-    {labs.map((lab) => (
-      <a
-        key={lab.id}
-        href={`/labs/${lab.id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`min-w-[200px] border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] focus:outline-none cursor-pointer
-          ${levelColors[lab.level]}`}
-      >
-        <h3 className="font-semibold text-lg">{lab.name}</h3>
-        <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
-          {lab.alias}
-        </p>
-        <p className="text-xs mt-2 font-mono text-gray-700 dark:text-gray-400">
-          Level: <strong>L{lab.level}</strong>
-        </p>
-      </a>
-    ))}
-  </div>
-</section>
+            {labs.map((lab) => (
+              <a
+                key={lab.id}
+                href={`/labs/${lab.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`min-w-[200px] border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] focus:outline-none cursor-pointer ${levelColors[lab.level]}`}
+              >
+                <h3 className="font-semibold text-lg">{lab.name}</h3>
+                <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
+                  {lab.alias}
+                </p>
+                <p className="text-xs mt-2 font-mono text-gray-700 dark:text-gray-400">
+                  Level: <strong>L{lab.level}</strong>
+                </p>
+              </a>
+            ))}
+          </div>
+          
+           <br></br> 
 
+          {is_reviewer && (
+            <div className="mt-6">
+              <Link
+                href="/labs/requests"
+                className="block w-full sm:w-fit border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] focus:outline-none cursor-pointer bg-yellow-100 dark:bg-yellow-900/40 border-yellow-300"
+              >
+                <h3 className="font-semibold text-lg">Review Lab Requests</h3>
+                <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
+                  View and approve or reject incoming VL proposals
+                </p>
+                <p className="text-xs mt-2 font-mono text-gray-700 dark:text-gray-400">
+                  Requires reviewer permissions
+                </p>
+              </Link>
+            </div>
+          )}
+        </section>
       </main>
 
       <footer className="row-start-3 text-xs text-gray-400 dark:text-gray-500 text-center">
