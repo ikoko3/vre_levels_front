@@ -49,10 +49,30 @@ export default function Home() {
        <section className="w-full">
   <h2 className="text-xl font-semibold mb-4">Explore Virtual Labs</h2>
   <div className="flex overflow-x-auto gap-4 p-2">
+    <a
+  href="/labs/propose"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="min-w-[200px] border-2 border-dashed border-blue-400 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-left p-4 shadow hover:shadow-md hover:scale-[1.02] active:scale-[.98] transition cursor-pointer"
+>
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-xl">➕</span>
+        <h3 className="font-semibold text-lg text-blue-800 dark:text-blue-200">
+          Propose a new lab
+        </h3>
+      </div>
+      <p className="text-xs mt-1 text-gray-700 dark:text-gray-300 italic">
+        Express your interest in creating a new Virtual Lab.
+      </p>
+      <p className="text-xs mt-2 font-mono text-gray-600 dark:text-gray-400">
+        Your proposal will be reviewed.
+      </p>
+    </a>
+
     {labs.map((lab) => (
       <a
         key={lab.id}
-        href={`http://localhost:4000/labs/${lab.id}`}
+        href={`/labs/${lab.id}`}
         target="_blank"
         rel="noopener noreferrer"
         className={`min-w-[200px] border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] focus:outline-none cursor-pointer
