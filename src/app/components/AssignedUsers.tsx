@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@app/context/AuthContext";
 import { getAllRoles, getRoleByCode, initializeRoleCache } from "@app/lib/roles";
@@ -23,12 +23,11 @@ type Props = {
 export default function AssignedUsers({ users, labId }: Props) {
   const { user } = useContext(AuthContext);
   const isAdmin = user?.roles.includes("vre_admin");
-  const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
   const [availableUsers, setAvailableUsers] = useState<any[]>([]);
   const [availableRoles, setAvailableRoles] = useState<any[]>([]);
-  const [selectedUser, setSelectedUser] = useState<string>("");
+  const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedRole, setSelectedRole] = useState<string>("");
 
   useEffect(() => {
@@ -46,18 +45,14 @@ export default function AssignedUsers({ users, labId }: Props) {
 
   const handleAssign = async () => {
     try {
-      const userData = users.find((u) => u.userId === selectedUser);
+      const userData = users.find((u) => u.userId === selectedUserId);
       const existingRoles = userData?.role_codes || [];
       const updatedRoles = Array.from(new Set([...existingRoles, selectedRole]));
-      const userMeta = availableUsers.find((u) => u._id === selectedUser);
 
       const dto = [
         {
-          user_id: selectedUser,
+          user_id: selectedUserId,
           role_codes: updatedRoles,
-          name: userMeta?.name || "",
-          email: userMeta?.email || "",
-          reference_id: userMeta?.reference_id || "",
         },
       ];
 
@@ -134,13 +129,13 @@ export default function AssignedUsers({ users, labId }: Props) {
               <div>
                 <label className="block text-sm font-medium mb-1">Select User</label>
                 <select
+                  value={selectedUserId}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
                   className="w-full p-2 border rounded bg-white dark:bg-gray-700 dark:text-white"
-                  value={selectedUser}
-                  onChange={(e) => setSelectedUser(e.target.value)}
                 >
-                  <option value="">-- Choose a user --</option>
+                  <option value="">Select a user</option>
                   {availableUsers.map((u) => (
-                    <option key={u._id} value={u._id}>
+                    <option key={u.id} value={u.id}>
                       {u.name || u.reference_id} — {u.email || "No Email"}
                     </option>
                   ))}
@@ -171,7 +166,7 @@ export default function AssignedUsers({ users, labId }: Props) {
                 <button
                   onClick={handleAssign}
                   className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  disabled={!selectedUser || !selectedRole}
+                  disabled={!selectedUserId || !selectedRole}
                 >
                   Assign
                 </button>
