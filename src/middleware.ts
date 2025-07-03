@@ -24,12 +24,14 @@ export async function middleware(request: NextRequest) {
     loginUrl.searchParams.set('scope', 'openid');
     loginUrl.searchParams.set('state', request.nextUrl.pathname); // preserve path
 
-
     return NextResponse.redirect(loginUrl);
   }
 
   try {
-    const publicKey = await importSPKI(process.env.KEYCLOAK_PUBLIC_KEY!, RS256_ALG);
+    const publicKey = await importSPKI(
+      process.env.KEYCLOAK_PUBLIC_KEY!,
+      RS256_ALG,
+    );
     const { payload } = await jwtVerify(token, publicKey);
     console.log('Verified user:', payload);
 

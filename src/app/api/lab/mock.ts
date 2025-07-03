@@ -5,11 +5,10 @@ import type { VirtualLabViewModel } from '@app/types/lab/viewModels';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<VirtualLabViewModel>
+  res: NextApiResponse<VirtualLabViewModel>,
 ) {
   res.status(200).json(dolphinLabMock);
 }
-
 
 export const dolphinLabMock: VirtualLabViewModel = {
   name: 'Dolphin watching Lab',

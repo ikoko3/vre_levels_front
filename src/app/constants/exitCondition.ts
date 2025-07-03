@@ -45,7 +45,7 @@ export const exitConditionStatuses: Record<number, string> = {
 //     //Development
 //     InProgress = 100,
 //     Blocked = 101,
-    
+
 //     //Evaluation
 //     RequestedEvaluation = 200,
 //     UnderEvalutaion = 201,
