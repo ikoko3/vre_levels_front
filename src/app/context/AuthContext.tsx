@@ -12,6 +12,7 @@ interface AuthContextType {
     email: string;
     roles: string[];
     id: string;
+    app_id: string;
   } | null;
   logout: () => void;
 }
@@ -35,15 +36,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { name, email, resource_access, sub } = keycloak.tokenParsed;
 
         const clientRoles =
-          resource_access?.['nextjs-frontend']?.roles || []; // ← change this line
+          resource_access?.['nextjs-frontend']?.roles || [];
 
         await initializeRoleCache();
 
+        const res = await fetch(`http://localhost:3000/user-by-reference/${sub}`,);
+        if (!res.ok) throw new Error('Failed to fetch user');
+  
         setUser({
           name: name || 'Unknown',
           email: email || 'No email',
           roles: clientRoles,
           id: sub,
+          app_id: (await res.json()).id,
         });
       }
 

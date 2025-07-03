@@ -97,23 +97,56 @@ export default function Home() {
           
            <br></br> 
 
-          {is_reviewer && (
-            <div className="mt-6">
-              <Link
-                href="/labs/requests"
-                className="block w-full sm:w-fit border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] focus:outline-none cursor-pointer bg-yellow-100 dark:bg-yellow-900/40 border-yellow-300"
-              >
-                <h3 className="font-semibold text-lg">Review Lab Requests</h3>
-                <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
-                  View and approve or reject incoming VL proposals
-                </p>
-                <p className="text-xs mt-2 font-mono text-gray-700 dark:text-gray-400">
-                  Requires reviewer permissions
-                </p>
-              </Link>
-            </div>
-          )}
+
+          
         </section>
+
+        <section className="w-full mt-10">
+        <h2 className="text-xl font-semibold mb-4">Lab Tools</h2>
+
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Public: Associated Labs */}
+          <Link
+            href="/labs/by/user"
+            className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+          >
+            <h3 className="font-semibold text-lg">Associated Labs</h3>
+            <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
+              View labs where you're assigned based on your roles.
+            </p>
+          </Link>
+
+          {/* Public: Labs History */}
+          <Link
+            href="/labs/history"
+            className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+          >
+            <h3 className="font-semibold text-lg">View Labs History</h3>
+            <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
+              Browse completed or past virtual labs and track their maturity.
+            </p>
+          </Link>
+
+          {/* Reviewer-only: Lab Requests */}
+          {is_reviewer && (
+            <Link
+              href="/labs/requests"
+              className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-yellow-100 dark:bg-yellow-900/40 border-yellow-300"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-semibold text-lg">Review Lab Requests</h3>
+                <span className="text-xs bg-yellow-300 dark:bg-yellow-700 px-2 py-0.5 rounded-full text-yellow-900 dark:text-yellow-100">
+                  Reviewer
+                </span>
+              </div>
+              <p className="text-xs text-gray-800 dark:text-gray-300 italic">
+                View and approve or reject incoming VL proposals.
+              </p>
+            </Link>
+          )}
+        </div>
+      </section>
+
       </main>
 
       <footer className="row-start-3 text-xs text-gray-400 dark:text-gray-500 text-center">
