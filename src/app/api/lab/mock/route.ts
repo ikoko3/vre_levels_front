@@ -7,7 +7,6 @@ export async function GET(): Promise<NextResponse<VirtualLabViewModel>> {
   return NextResponse.json(dolphinLabMock);
 }
 
-
 export const dolphinLabMock: VirtualLabViewModel = {
   name: 'Dolphin watching Lab',
   alias: 'DLPH-01',

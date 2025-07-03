@@ -1,9 +1,8 @@
-"use client";
-import { useEffect, useState, useContext } from "react";
-import { AuthContext } from "@app/context/AuthContext";
-import { API_BASE_URL } from "@app/constants/config";
-import Link from "next/link";
-
+'use client';
+import { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '@app/context/AuthContext';
+import { API_BASE_URL } from '@app/constants/config';
+import Link from 'next/link';
 
 type Lab = {
   id: string;
@@ -13,11 +12,11 @@ type Lab = {
 };
 
 const levelColors = [
-  "bg-red-200 dark:bg-red-900/40 border-red-300",
-  "bg-orange-200 dark:bg-orange-900/40 border-orange-300",
-  "bg-yellow-200 dark:bg-yellow-900/40 border-yellow-300",
-  "bg-green-200 dark:bg-green-900/40 border-green-300",
-  "bg-blue-200 dark:bg-blue-900/40 border-blue-300",
+  'bg-red-200 dark:bg-red-900/40 border-red-300',
+  'bg-orange-200 dark:bg-orange-900/40 border-orange-300',
+  'bg-yellow-200 dark:bg-yellow-900/40 border-yellow-300',
+  'bg-green-200 dark:bg-green-900/40 border-green-300',
+  'bg-blue-200 dark:bg-blue-900/40 border-blue-300',
 ];
 
 export default function Home() {
@@ -39,9 +38,12 @@ export default function Home() {
       <main className="flex flex-col gap-10 row-start-2 items-center sm:items-start max-w-4xl w-full">
         {/* Title */}
         <section className="space-y-2 text-center sm:text-left">
-          <h1 className="text-3xl font-bold">Welcome to the VL Maturity Management System</h1>
+          <h1 className="text-3xl font-bold">
+            Welcome to the VL Maturity Management System
+          </h1>
           <p className="text-base text-gray-700 dark:text-gray-300">
-            This platform helps researchers track and manage the evolution of their Virtual Research Labs (VRLs).
+            This platform helps researchers track and manage the evolution of
+            their Virtual Research Labs (VRLs).
           </p>
           <a
             href="https://naavre.net/docs/readiness_levels/"
@@ -95,59 +97,55 @@ export default function Home() {
               </a>
             ))}
           </div>
-          
-           <br></br> 
 
-
-          
+          <br></br>
         </section>
 
         <section className="w-full mt-10">
-        <h2 className="text-xl font-semibold mb-4">Lab Tools</h2>
+          <h2 className="text-xl font-semibold mb-4">Lab Tools</h2>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {/* Public: Associated Labs */}
-          <Link
-            href="/labs/by/user"
-            className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
-          >
-            <h3 className="font-semibold text-lg">Associated Labs</h3>
-            <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
-              View labs where you're assigned based on your roles.
-            </p>
-          </Link>
-
-          {/* Public: Labs History */}
-          <Link
-            href="/labs/history/graph"
-            className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
-          >
-            <h3 className="font-semibold text-lg">View Labs History</h3>
-            <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
-              Browse completed or past virtual labs and track their maturity.
-            </p>
-          </Link>
-
-          {/* Reviewer-only: Lab Requests */}
-          {is_reviewer && (
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Public: Associated Labs */}
             <Link
-              href="/labs/requests"
-              className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-yellow-100 dark:bg-yellow-900/40 border-yellow-300"
+              href="/labs/by/user"
+              className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
             >
-              <div className="flex items-center justify-between mb-1">
-                <h3 className="font-semibold text-lg">Review Lab Requests</h3>
-                <span className="text-xs bg-yellow-300 dark:bg-yellow-700 px-2 py-0.5 rounded-full text-yellow-900 dark:text-yellow-100">
-                  Reviewer
-                </span>
-              </div>
-              <p className="text-xs text-gray-800 dark:text-gray-300 italic">
-                View and approve or reject incoming VL proposals.
+              <h3 className="font-semibold text-lg">Associated Labs</h3>
+              <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
+                View labs where you're assigned based on your roles.
               </p>
             </Link>
-          )}
-        </div>
-      </section>
 
+            {/* Public: Labs History */}
+            <Link
+              href="/labs/history/graph"
+              className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+            >
+              <h3 className="font-semibold text-lg">View Labs History</h3>
+              <p className="text-xs mt-1 text-gray-800 dark:text-gray-300 italic">
+                Browse completed or past virtual labs and track their maturity.
+              </p>
+            </Link>
+
+            {/* Reviewer-only: Lab Requests */}
+            {is_reviewer && (
+              <Link
+                href="/labs/requests"
+                className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-yellow-100 dark:bg-yellow-900/40 border-yellow-300"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="font-semibold text-lg">Review Lab Requests</h3>
+                  <span className="text-xs bg-yellow-300 dark:bg-yellow-700 px-2 py-0.5 rounded-full text-yellow-900 dark:text-yellow-100">
+                    Reviewer
+                  </span>
+                </div>
+                <p className="text-xs text-gray-800 dark:text-gray-300 italic">
+                  View and approve or reject incoming VL proposals.
+                </p>
+              </Link>
+            )}
+          </div>
+        </section>
       </main>
 
       <footer className="row-start-3 text-xs text-gray-400 dark:text-gray-500 text-center">

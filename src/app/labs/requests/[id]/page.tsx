@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import RequestReviewPage from "@app/components/RequestReviewPage";
+import { useParams } from 'next/navigation';
+import RequestReviewPage from '@app/components/RequestReviewPage';
 
 export default function RequestPageWrapper() {
   const params = useParams();
