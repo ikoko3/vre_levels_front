@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@app/constants/config";
 
 export enum RequestStatus {
   Undefined = 0,
@@ -26,7 +27,7 @@ export default function RequestReviewPage({ id }: { id: string }) {
   const [status, setStatus] = useState<RequestStatus>(RequestStatus.Submitted);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/request/labs/${id}`)
+    fetch(`${API_BASE_URL}/request/labs/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setRequest(data);
@@ -34,8 +35,8 @@ export default function RequestReviewPage({ id }: { id: string }) {
         setComment(data.comments);
       });
 
-    fetch("http://localhost:3000/users").then(res => res.json()).then(setUsers);
-    fetch("http://localhost:3000/roles").then(res => res.json()).then(setRoles);
+    fetch(`${API_BASE_URL}/users`).then(res => res.json()).then(setUsers);
+    fetch(`${API_BASE_URL}/roles`).then(res => res.json()).then(setRoles);
   }, [id]);
 
   const getUser = (uid: string) => users.find(u => u.id === uid);
@@ -43,7 +44,7 @@ export default function RequestReviewPage({ id }: { id: string }) {
 
   const handleSubmit = async () => {
     const reviewer = localStorage.getItem("user_id") || users[0]?._id; // Replace with real user session
-    await fetch(`http://localhost:3000/request/labs/${id}/update`, {
+    await fetch(`${API_BASE_URL}/request/labs/${id}/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

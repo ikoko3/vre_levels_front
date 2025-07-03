@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Docker Usage
+
+You can run the application inside a Docker container for development and debugging.
+
+Build the image:
+
+```bash
+docker build -t vle-frontend .
+```
+
+Run the container exposing the dev server (port 4000) and the Node debugger (port 9229):
+
+```bash
+docker run -p 4000:4000 -p 9229:9229 vle-frontend
+```
+
+Then attach VS Code to the debugger on `localhost:9229`.

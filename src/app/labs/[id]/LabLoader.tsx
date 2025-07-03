@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '@app/context/AuthContext';
+import { API_BASE_URL } from '@app/constants/config';
 import LabView from '@app/components/LabView';
 import { VirtualLabViewModel } from '@app/types/lab/viewModels';
 
@@ -16,7 +17,7 @@ export default function LabLoader({ id }: { id: string }) {
       if (!keycloak?.token) return;
 
       try {
-        const res = await fetch(`http://localhost:3000/lab/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/lab/${id}`, {
           headers: {
             Authorization: `Bearer ${keycloak.token}`,
           },

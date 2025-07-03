@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "@app/context/AuthContext";
+import { API_BASE_URL } from "@app/constants/config";
 import Link from "next/link";
 
 
@@ -27,7 +28,7 @@ export default function Home() {
   const is_reviewer = keycloakRoles.includes('vre_lab_reviewer');
 
   useEffect(() => {
-    fetch("http://localhost:3000/lab/list")
+    fetch(`${API_BASE_URL}/lab/list`)
       .then((res) => res.json())
       .then(setLabs)
       .catch(console.error);

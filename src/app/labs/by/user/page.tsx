@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@app/context/AuthContext";
+import { API_BASE_URL } from "@app/constants/config";
 import Link from "next/link";
 
 const LabLevelStatuses: Record<number, string> = {
@@ -46,7 +47,7 @@ export default function LabsByRolePage() {
 
   useEffect(() => {
     if (!user?.id || !roleCode) return;
-    fetch(`http://localhost:3000/lab/by-user/${user.app_id}?roleCode=${roleCode}`)
+    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}?roleCode=${roleCode}`)
       .then((res) => res.json())
       .then(setLabs)
       .catch(console.error);

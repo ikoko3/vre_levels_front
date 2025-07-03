@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@app/context/AuthContext";
+import { API_BASE_URL } from "@app/constants/config";
 import Link from "next/link";
 
 export enum RequestStatus {
@@ -27,9 +28,9 @@ export default function RequestListPage() {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    const url = `http://localhost:3000/request/labs${showAll ? '?show_all=true' : ''}`;
+    const url = `${API_BASE_URL}/request/labs${showAll ? '?show_all=true' : ''}`;
     fetch(url).then(res => res.json()).then(setRequests);
-    fetch("http://localhost:3000/users").then(res => res.json()).then(setUsers);
+    fetch(`${API_BASE_URL}/users`).then(res => res.json()).then(setUsers);
   }, [showAll]);
 
   const isReviewer = user?.roles.includes("vre_lab_reviewer");

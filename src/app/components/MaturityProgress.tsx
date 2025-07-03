@@ -4,6 +4,7 @@
 
 import React, { useState } from "react";
 import { getRoleByCode } from "@app/lib/roles";
+import { API_BASE_URL } from "@app/constants/config";
 
 interface Props {
   roles: string[];
@@ -49,7 +50,7 @@ export default function MaturityProgress({
     [100, 101, 200, 201, 203].includes(levelState) && roles.includes("CRD");
 
   const updateLevel = async (newLevel: number, state: number) => {
-    const res = await fetch(`http://localhost:3000/lab/${labId}/update_level`, {
+    const res = await fetch(`${API_BASE_URL}/lab/${labId}/update_level`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ level: newLevel, state }),
