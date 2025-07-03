@@ -182,7 +182,7 @@ export default function ProposeLabPage() {
               className="w-full mt-1 p-2 border rounded bg-white dark:bg-gray-700 dark:text-white"
             >
               <option value="">-- Select Level --</option>
-              {[...Array(11)].map((_, i) => (
+              {[...Array(5)].map((_, i) => (
                 <option key={i} value={i}>
                   Level {i}
                 </option>

@@ -118,7 +118,7 @@ export default function Home() {
 
           {/* Public: Labs History */}
           <Link
-            href="/labs/history"
+            href="/labs/history/graph"
             className="block border rounded-lg shadow p-4 text-left transition transform hover:scale-[1.02] active:scale-[.98] cursor-pointer bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
           >
             <h3 className="font-semibold text-lg">View Labs History</h3>
