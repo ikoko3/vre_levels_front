@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "@app/context/AuthContext";
+import { API_BASE_URL } from "@app/constants/config";
 
 interface Lab {
   id: string;
@@ -32,8 +33,8 @@ export default function ProposeLabPage() {
   const [labs, setLabs] = useState<Lab[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/users").then(res => res.json()).then(setUsers);
-    fetch("http://localhost:3000/lab/list").then(res => res.json()).then(setLabs);
+    fetch(`${API_BASE_URL}/users`).then(res => res.json()).then(setUsers);
+    fetch(`${API_BASE_URL}/lab/list`).then(res => res.json()).then(setLabs);
   }, []);
 
   const handleDeveloperToggle = (id: string) => {
@@ -62,7 +63,7 @@ export default function ProposeLabPage() {
       payload.lab_reference = { lab_id: sourceLab, lab_level: Number(sourceLevel) };
     }
 
-    await fetch("http://localhost:3000/request/labs/create", {
+    await fetch(`${API_BASE_URL}/request/labs/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

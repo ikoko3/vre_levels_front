@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { KEYCLOAK_AUTH_URL } from "@app/constants/config";
 
 export default function UnauthorizedPage() {
   useEffect(() => {
-    const loginUrl = new URL(
-      "http://localhost:8080/realms/vre/protocol/openid-connect/auth"
-    );
+    const loginUrl = new URL(KEYCLOAK_AUTH_URL);
 
     loginUrl.searchParams.set("client_id", "nextjs-frontend");
     loginUrl.searchParams.set("redirect_uri", window.location.origin + "/callback");

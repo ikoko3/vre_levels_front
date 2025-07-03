@@ -2,7 +2,8 @@
 
 import React, { createContext, useEffect, useState } from "react";
 import keycloak from "../lib/auth";
-import {initializeRoleCache} from "@app/lib/roles"; 
+import { initializeRoleCache } from "@app/lib/roles";
+import { API_BASE_URL } from "@app/constants/config";
 
 interface AuthContextType {
   keycloak: Keycloak.KeycloakInstance | null;
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         await initializeRoleCache();
 
-        const res = await fetch(`http://localhost:3000/user-by-reference/${sub}`,);
+        const res = await fetch(`${API_BASE_URL}/user-by-reference/${sub}`);
         if (!res.ok) throw new Error('Failed to fetch user');
   
         setUser({

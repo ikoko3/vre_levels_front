@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@app/constants/config";
 import {
   GraphCanvas,
   GraphNode,
@@ -30,7 +31,7 @@ export default function LabHistoryGraph() {
   const [edges, setEdges] = useState<GraphEdge[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/lab/dependencies/graph")
+    fetch(`${API_BASE_URL}/lab/dependencies/graph`)
       .then((res) => res.json())
       .then((data) => {
         const mappedNodes: LabGraphNode[] = data.nodes.map((n: BackendNode) => ({

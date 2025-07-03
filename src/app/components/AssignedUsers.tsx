@@ -6,6 +6,7 @@ import { use, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@app/context/AuthContext";
 import { getAllRoles, getRoleByCode, initializeRoleCache } from "@app/lib/roles";
+import { API_BASE_URL } from "@app/constants/config";
 
 type AssignedUser = {
   userId: string;
@@ -32,7 +33,7 @@ export default function AssignedUsers({ users, labId }: Props) {
 
   useEffect(() => {
     if (showModal) {
-      fetch("http://localhost:3000/users")
+      fetch(`${API_BASE_URL}/users`)
         .then((res) => res.json())
         .then(setAvailableUsers);
 
@@ -56,7 +57,7 @@ export default function AssignedUsers({ users, labId }: Props) {
         },
       ];
 
-      const res = await fetch(`http://localhost:3000/lab/${labId}/assign-users`, {
+      const res = await fetch(`${API_BASE_URL}/lab/${labId}/assign-users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dto),

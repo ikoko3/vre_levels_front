@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { API_BASE_URL } from "@app/constants/config";
 import { ExitConditionCardProps } from "@app/components/ExitConditions/types";
 import { exitConditionLabels, exitConditionStatuses } from "@app/constants/exitCondition";
 
@@ -25,7 +26,7 @@ export default function ExitConditionCard({ cond, labId, userRoles }: ExitCondit
   const handleSave = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/lab/${labId}/exit_condition/${cond.id}/update`,
+        `${API_BASE_URL}/lab/${labId}/exit_condition/${cond.id}/update`,
         {
           method: "POST",
           headers: {

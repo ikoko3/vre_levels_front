@@ -8,8 +8,10 @@ type Role = {
 const roleCache = new Map<string, Role>();
 let initialized = false;
 
+import { API_BASE_URL } from '@app/constants/config';
+
 async function fetchRoles(): Promise<void> {
-  const res = await fetch('http://localhost:3000/roles');
+  const res = await fetch(`${API_BASE_URL}/roles`);
   if (!res.ok) throw new Error('Failed to fetch roles');
   const roles: Role[] = await res.json();
 
