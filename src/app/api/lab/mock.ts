@@ -10,7 +10,6 @@ export default async function handler(
   res.status(200).json(dolphinLabMock);
 }
 
-
 export const dolphinLabMock: VirtualLabViewModel = {
   name: 'Dolphin watching Lab',
   alias: 'DLPH-01',

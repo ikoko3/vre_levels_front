@@ -5,7 +5,6 @@ import { AuthContext } from '@app/context/AuthContext';
 import LabView from '@app/components/LabView';
 import { VirtualLabViewModel } from '@app/types/lab/viewModels';
 
-
 export default function LabLoader({ id }: { id: string }) {
   const { keycloak } = useContext(AuthContext);
   const [lab, setLab] = useState<VirtualLabViewModel | null>(null);
@@ -51,7 +50,7 @@ export default function LabLoader({ id }: { id: string }) {
             assignedAt: u.assigned_at,
             reference_id: u.reference_id,
             name: u.name,
-            email: u.email
+            email: u.email,
           })),
         };
 

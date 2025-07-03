@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   GraphCanvas,
   GraphNode,
   GraphEdge,
   NodePositionArgs,
-  InternalGraphPosition
-} from "reagraph";
+  InternalGraphPosition,
+} from 'reagraph';
 
 interface BackendNode {
   id: string;
@@ -30,34 +30,43 @@ export default function LabHistoryGraph() {
   const [edges, setEdges] = useState<GraphEdge[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/lab/dependencies/graph")
+    fetch('http://localhost:3000/lab/dependencies/graph')
       .then((res) => res.json())
       .then((data) => {
-        const mappedNodes: LabGraphNode[] = data.nodes.map((n: BackendNode) => ({
-          id: n.id,
-          label: n.label,
-          subLabel: `Level ${n.level}`,
-          fill: getLevelColor(n.level),
-          labId: n.labId || n.id.split("-")[0] // fallback if labId is not provided
-        }));
+        const mappedNodes: LabGraphNode[] = data.nodes.map(
+          (n: BackendNode) => ({
+            id: n.id,
+            label: n.label,
+            subLabel: `Level ${n.level}`,
+            fill: getLevelColor(n.level),
+            labId: n.labId || n.id.split('-')[0], // fallback if labId is not provided
+          })
+        );
 
         const mappedEdges: GraphEdge[] = data.edges.map((e: BackendEdge) => ({
           source: e.from,
           target: e.to,
           id: `${e.from}-${e.to}`,
-          label: `${e.from}-${e.to}`
+          label: `${e.from}-${e.to}`,
         }));
 
         setNodes(mappedNodes);
         setEdges(mappedEdges);
 
-        console.log("Graph data loaded:", { nodes: mappedNodes, edges: mappedEdges, data });
+        console.log('Graph data loaded:', {
+          nodes: mappedNodes,
+          edges: mappedEdges,
+          data,
+        });
       })
       .catch(console.error);
   }, []);
 
-  const getNodePosition = (id: string, { nodes }: NodePositionArgs): InternalGraphPosition => {
-    const currentNode = nodes.find(n => n.id === id) as LabGraphNode;
+  const getNodePosition = (
+    id: string,
+    { nodes }: NodePositionArgs
+  ): InternalGraphPosition => {
+    const currentNode = nodes.find((n) => n.id === id) as LabGraphNode;
     if (!currentNode) {
       return {
         id,
@@ -66,20 +75,22 @@ export default function LabHistoryGraph() {
         z: 1,
         index: 0,
         data: undefined,
-        links: []
+        links: [],
       };
     }
 
     // Group nodes by labId
     const labGroups: Record<string, LabGraphNode[]> = {};
-    (nodes as LabGraphNode[]).forEach(node => {
+    (nodes as LabGraphNode[]).forEach((node) => {
       if (!labGroups[node.labId]) labGroups[node.labId] = [];
       labGroups[node.labId].push(node);
     });
 
     const labOrder = Object.keys(labGroups);
     const groupIndex = labOrder.indexOf(currentNode.labId);
-    const nodeIndex = labGroups[currentNode.labId].findIndex(n => n.id === id);
+    const nodeIndex = labGroups[currentNode.labId].findIndex(
+      (n) => n.id === id
+    );
 
     return {
       id,
@@ -88,7 +99,7 @@ export default function LabHistoryGraph() {
       z: 1,
       index: nodeIndex,
       data: currentNode,
-      links: []
+      links: [],
     };
   };
 
@@ -107,6 +118,6 @@ export default function LabHistoryGraph() {
 }
 
 function getLevelColor(level: number): string {
-  const palette = ["#f87171", "#fb923c", "#facc15", "#4ade80", "#60a5fa"];
-  return palette[level] || "#a3a3a3";
+  const palette = ['#f87171', '#fb923c', '#facc15', '#4ade80', '#60a5fa'];
+  return palette[level] || '#a3a3a3';
 }
