@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useContext } from "react";
-import { AuthContext } from "@app/context/AuthContext";
+import { useContext } from 'react';
+import { AuthContext } from '@app/context/AuthContext';
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -15,9 +15,11 @@ export default function Navbar() {
           <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 text-sm text-right">
             <div className="sm:text-left space-y-0.5">
               <div>{user.name}</div>
-              <div className="text-gray-500 dark:text-gray-400">{user.email}</div>
+              <div className="text-gray-500 dark:text-gray-400">
+                {user.email}
+              </div>
               <div className="text-xs text-indigo-500 dark:text-indigo-400">
-                {user.roles.slice(0, 3).join(", ")}
+                {user.roles.slice(0, 3).join(', ')}
               </div>
             </div>
             <button

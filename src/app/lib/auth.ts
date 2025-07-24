@@ -1,7 +1,8 @@
 import Keycloak from 'keycloak-js';
+import { KEYCLOAK_BASE_URL, KEYCLOAK_LOGOUT_URL } from '@app/constants/config';
 
 const keycloak = new Keycloak({
-  url: 'http://localhost:8080',
+  url: KEYCLOAK_BASE_URL,
   realm: 'vre',
   clientId: 'nextjs-frontend',
 });
@@ -13,7 +14,6 @@ type User = {
   email: string;
   roles: string[];
 };
-
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -40,5 +40,5 @@ export async function getCurrentUser(): Promise<User | null> {
 
 export async function logout() {
   const redirectUri = window.location.origin;
-  window.location.href = `http://localhost:8080/realms/vre/protocol/openid-connect/logout?redirect_uri=${encodeURIComponent(redirectUri)}`;
+  window.location.href = `${KEYCLOAK_LOGOUT_URL}?redirect_uri=${encodeURIComponent(redirectUri)}`;
 }

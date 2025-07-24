@@ -1,6 +1,7 @@
 // middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify, importSPKI } from 'jose';
+import { KEYCLOAK_AUTH_URL, APP_BASE_URL } from '@app/constants/config';
 
 const RS256_ALG = 'RS256';
 const PUBLIC_PATHS = ['/', '/favicon.ico', '/public', '/api/public'];
@@ -16,21 +17,21 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('kc-token')?.value;
 
   if (!token) {
-    const loginUrl = new URL(
-      'http://localhost:8080/realms/vre/protocol/openid-connect/auth'
-    );
+    const loginUrl = new URL(KEYCLOAK_AUTH_URL);
     loginUrl.searchParams.set('client_id', 'nextjs-frontend');
-    loginUrl.searchParams.set('redirect_uri', 'http://localhost:4000/callback');
+    loginUrl.searchParams.set('redirect_uri', `${APP_BASE_URL}/callback`);
     loginUrl.searchParams.set('response_type', 'code');
     loginUrl.searchParams.set('scope', 'openid');
     loginUrl.searchParams.set('state', request.nextUrl.pathname); // preserve path
-
 
     return NextResponse.redirect(loginUrl);
   }
 
   try {
-    const publicKey = await importSPKI(process.env.KEYCLOAK_PUBLIC_KEY!, RS256_ALG);
+    const publicKey = await importSPKI(
+      process.env.KEYCLOAK_PUBLIC_KEY!,
+      RS256_ALG,
+    );
     const { payload } = await jwtVerify(token, publicKey);
     console.log('Verified user:', payload);
 
