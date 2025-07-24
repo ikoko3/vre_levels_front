@@ -4,6 +4,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import keycloak from '../lib/auth';
 import { initializeRoleCache } from '@app/lib/roles';
 import { API_BASE_URL } from '@app/constants/config';
+import { usePathname } from "next/navigation";
 
 interface AuthContextType {
   keycloak: Keycloak.KeycloakInstance | null;
