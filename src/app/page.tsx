@@ -56,7 +56,8 @@ export default function Home() {
         {/* Carousel */}
         <section className="w-full">
           <h2 className="text-xl font-semibold mb-4">Explore Virtual Labs</h2>
-          <div className="flex overflow-x-auto gap-4 p-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+
             {can_propose_lab && (
               <a
                 href="/labs/propose"
