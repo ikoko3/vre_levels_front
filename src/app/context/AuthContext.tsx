@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import keycloak from "../lib/auth";
 import {initializeRoleCache} from "@app/lib/roles"; 
 
@@ -27,10 +28,17 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
   const [user, setUser] = useState<AuthContextType["user"]>(null);
+  const pathname = usePathname();
+
+  const requiresAuth = () => {
+    if (pathname === "/" || pathname === "/labs/history/graph") return false;
+    if (/^\/labs\/[^/]+$/.test(pathname)) return false;
+    return true;
+  };
 
   useEffect(() => {
   keycloak
-    .init({ onLoad: 'login-required', checkLoginIframe: false })
+    .init({ onLoad: requiresAuth() ? 'login-required' : 'check-sso', checkLoginIframe: false })
     .then(async (authenticated) => {
       if (authenticated && keycloak.tokenParsed) {
         const { name, email, resource_access, sub } = keycloak.tokenParsed;
