@@ -13,14 +13,12 @@ export default function LabLoader({ id }: { id: string }) {
 
   useEffect(() => {
     const fetchLab = async () => {
-      if (!keycloak?.token) return;
-
       try {
-        const res = await fetch(`${API_BASE_URL}/lab/${id}`, {
-          headers: {
-            Authorization: `Bearer ${keycloak.token}`,
-          },
-        });
+        const headers: Record<string, string> = {};
+        if (keycloak?.token) {
+          headers.Authorization = `Bearer ${keycloak.token}`;
+        }
+        const res = await fetch(`${API_BASE_URL}/lab/${id}`, { headers });
 
         if (!res.ok) {
           throw new Error(`Error ${res.status}: ${await res.text()}`);
@@ -62,7 +60,7 @@ export default function LabLoader({ id }: { id: string }) {
     };
 
     fetchLab();
-  }, [id, keycloak]);
+  }, [id, keycloak?.token]);
 
   if (error) return <p className="text-red-600">Error: {error}</p>;
   if (!lab) return <p>Loading...</p>;

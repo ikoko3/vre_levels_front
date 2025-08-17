@@ -2,9 +2,10 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { getRoleByCode } from '@app/lib/roles';
 import { API_BASE_URL } from '@app/constants/config';
+import { AuthContext } from '@app/context/AuthContext';
 
 interface Props {
   roles: string[];
@@ -39,6 +40,7 @@ export default function MaturityProgress({
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(levelState);
+  const { keycloak } = useContext(AuthContext);
 
   const percentage =
     totalConditions > 0
@@ -55,7 +57,12 @@ export default function MaturityProgress({
   const updateLevel = async (newLevel: number, state: number) => {
     const res = await fetch(`${API_BASE_URL}/lab/${labId}/update_level`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(keycloak?.token && {
+          Authorization: `Bearer ${keycloak.token}`,
+        }),
+      },
       body: JSON.stringify({ level: newLevel, state }),
     });
 

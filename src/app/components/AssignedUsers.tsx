@@ -26,7 +26,7 @@ type Props = {
 };
 
 export default function AssignedUsers({ users, labId }: Props) {
-  const { user } = useContext(AuthContext);
+  const { user, keycloak } = useContext(AuthContext);
   const isAdmin = user?.roles.includes('vre_admin');
 
   const [showModal, setShowModal] = useState(false);
@@ -65,7 +65,12 @@ export default function AssignedUsers({ users, labId }: Props) {
 
       const res = await fetch(`${API_BASE_URL}/lab/${labId}/assign-users`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(keycloak?.token && {
+            Authorization: `Bearer ${keycloak.token}`,
+          }),
+        },
         body: JSON.stringify(dto),
       });
 

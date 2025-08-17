@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { API_BASE_URL } from '@app/constants/config';
 import { ExitConditionCardProps } from '@app/components/ExitConditions/types';
 import {
   exitConditionLabels,
   exitConditionStatuses,
 } from '@app/constants/exitCondition';
+import { AuthContext } from '@app/context/AuthContext';
 
 export default function ExitConditionCard({
   cond,
@@ -14,6 +15,7 @@ export default function ExitConditionCard({
   userRoles,
 }: ExitConditionCardProps) {
   const isCoordinator = userRoles.includes('CRD');
+  const { keycloak } = useContext(AuthContext);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showCommentModal, setShowCommentModal] = useState(false);
@@ -37,6 +39,9 @@ export default function ExitConditionCard({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(keycloak?.token && {
+              Authorization: `Bearer ${keycloak.token}`,
+            }),
           },
           body: JSON.stringify({
             status: selectedStatus,

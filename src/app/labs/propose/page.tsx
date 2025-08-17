@@ -19,7 +19,7 @@ interface User {
 }
 
 export default function ProposeLabPage() {
-  const { user } = useContext(AuthContext);
+  const { user, keycloak } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [alias, setAlias] = useState('');
   const [scope, setScope] = useState('');
@@ -72,7 +72,12 @@ export default function ProposeLabPage() {
 
     await fetch(`${API_BASE_URL}/request/labs/create`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(keycloak?.token && {
+          Authorization: `Bearer ${keycloak.token}`,
+        }),
+      },
       body: JSON.stringify(payload),
     });
 
