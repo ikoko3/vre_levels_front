@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { API_BASE_URL } from '@app/constants/config';
+import { AuthContext } from '@app/context/AuthContext';
 
 export enum RequestStatus {
   Undefined = 0,
@@ -25,6 +26,7 @@ export default function RequestReviewPage({ id }: { id: string }) {
   const [roles, setRoles] = useState<any[]>([]);
   const [comment, setComment] = useState('');
   const [status, setStatus] = useState<RequestStatus>(RequestStatus.Submitted);
+  const { keycloak } = useContext(AuthContext);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/request/labs/${id}`)
@@ -51,7 +53,12 @@ export default function RequestReviewPage({ id }: { id: string }) {
     const reviewer = localStorage.getItem('user_id') || users[0]?._id; // Replace with real user session
     await fetch(`${API_BASE_URL}/request/labs/${id}/update`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(keycloak?.token && {
+          Authorization: `Bearer ${keycloak.token}`,
+        }),
+      },
       body: JSON.stringify({
         status,
         reviewer_user_id: reviewer,
