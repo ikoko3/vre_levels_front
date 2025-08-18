@@ -54,13 +54,19 @@ interface ApiLab {
 }
 
 export default function LabsByRolePage() {
-  const { user } = useContext(AuthContext);
+  const { user, keycloak } = useContext(AuthContext);
   const [labs, setLabs] = useState<LabSummary[] | null>(null);
   const [roleCode, setRoleCode] = useState('CRD');
 
   useEffect(() => {
     if (!user?.app_id) return;
-    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}`)
+
+    const headers: Record<string, string> = {};
+    if (keycloak?.token) {
+      headers.Authorization = `Bearer ${keycloak.token}`;
+    }
+
+    fetch(`${API_BASE_URL}/lab/list`, { headers })
       .then(async (res) => {
         if (!res.ok) {
           console.error('Failed to fetch labs', res.status);
@@ -70,22 +76,27 @@ export default function LabsByRolePage() {
       })
       .then((data) => {
         const labsData: ApiLab[] = Array.isArray(data) ? data : [];
-        const mappedLabs: LabSummary[] = labsData.map((lab) => ({
-          id: lab.id,
-          name: lab.name,
-          alias: lab.alias,
-          current_level: lab.current_level,
-          level_state: lab.level_state,
-          role_codes:
-            lab.assigned_users?.find((u) => u.user_id === user.app_id)?.role_codes || [],
-        }));
+        const mappedLabs: LabSummary[] = labsData.flatMap((lab) => {
+          const assignment = lab.assigned_users?.find(
+            (u) => u.user_id === user.app_id,
+          );
+          if (!assignment) return [];
+          return [{
+            id: lab.id,
+            name: lab.name,
+            alias: lab.alias,
+            current_level: lab.current_level,
+            level_state: lab.level_state,
+            role_codes: assignment.role_codes || [],
+          }];
+        });
         setLabs(mappedLabs);
       })
       .catch((err) => {
         console.error(err);
         setLabs([]);
       });
-  }, [user?.app_id]);
+  }, [user?.app_id, keycloak?.token]);
 
   if (!user) return <div className="p-4">Loading...</div>;
 
