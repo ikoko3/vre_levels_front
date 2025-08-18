@@ -67,7 +67,7 @@ export default function LabsByRolePage() {
     }
     
 
-    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}`)
+    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}`, {headers})
       .then(async (res) => {
         if (!res.ok) {
           console.error('Failed to fetch labs', res.status);
@@ -92,7 +92,7 @@ export default function LabsByRolePage() {
         console.error(err);
         setLabs([]);
       });
-      
+
   }, [user?.app_id, keycloak?.token]);
 
   if (!user) return <div className="p-4">Loading...</div>;
