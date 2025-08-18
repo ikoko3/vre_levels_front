@@ -42,13 +42,19 @@ interface LabSummary {
 }
 
 export default function LabsByRolePage() {
-  const { user } = useContext(AuthContext);
+  const { user, keycloak } = useContext(AuthContext);
   const [labs, setLabs] = useState<LabSummary[] | null>(null);
   const [roleCode, setRoleCode] = useState('CRD');
 
   useEffect(() => {
     if (!user?.id) return;
-    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}`)
+    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}`,
+      {
+        headers: keycloak?.token
+          ? { Authorization: `Bearer ${keycloak.token}` }
+          : undefined,
+      },
+    )
       .then(async (res) => {
         if (!res.ok) {
           console.error('Failed to fetch labs', res.status);
@@ -61,7 +67,7 @@ export default function LabsByRolePage() {
         console.error(err);
         setLabs([]);
       });
-  }, [user?.id]);
+  }, [user?.id, keycloak?.token]);
 
   if (!user) return <div className="p-4">Loading...</div>;
 
