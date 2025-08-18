@@ -38,22 +38,35 @@ interface LabSummary {
   alias: string;
   current_level: number;
   level_state: number;
+  role_codes: string[];
 }
 
 export default function LabsByRolePage() {
   const { user } = useContext(AuthContext);
-  const [labs, setLabs] = useState<LabSummary[]>([]);
+  const [labs, setLabs] = useState<LabSummary[] | null>(null);
   const [roleCode, setRoleCode] = useState('CRD');
 
   useEffect(() => {
-    if (!user?.id || !roleCode) return;
-    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}?roleCode=${roleCode}`)
-      .then((res) => res.json())
-      .then(setLabs)
-      .catch(console.error);
-  }, [user?.id, roleCode]);
+    if (!user?.id) return;
+    fetch(`${API_BASE_URL}/lab/by-user/${user.app_id}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          console.error('Failed to fetch labs', res.status);
+          return [];
+        }
+        return res.json();
+      })
+      .then((data) => setLabs(Array.isArray(data) ? data : []))
+      .catch((err) => {
+        console.error(err);
+        setLabs([]);
+      });
+  }, [user?.id]);
 
   if (!user) return <div className="p-4">Loading...</div>;
+
+  const filteredLabs =
+    labs?.filter((lab) => lab.role_codes.includes(roleCode)) ?? [];
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -72,11 +85,15 @@ export default function LabsByRolePage() {
         </select>
       </div>
 
-      {labs.length === 0 ? (
+      {labs === null ? (
+        <p className="text-gray-600">Loading labs...</p>
+      ) : labs.length === 0 ? (
+        <p className="text-gray-600">You are not associated with any labs.</p>
+      ) : filteredLabs.length === 0 ? (
         <p className="text-gray-600">No labs found for this role.</p>
       ) : (
         <div className="grid gap-4">
-          {labs.map((lab) => {
+          {filteredLabs.map((lab) => {
             const statusLabel = LabLevelStatuses[lab.level_state] || 'Unknown';
             const actionHint = roleActions[roleCode]?.[lab.level_state];
             return (
