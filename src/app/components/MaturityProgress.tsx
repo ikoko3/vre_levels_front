@@ -37,6 +37,8 @@ export default function MaturityProgress({
 }: Props) {
   const [showEvalModal, setShowEvalModal] = useState(false);
   const [showReevalModal, setShowReevalModal] = useState(false);
+  const [showCancelEvalModal, setShowCancelEvalModal] = useState(false);
+  const [showCancelReevalModal, setShowCancelReevalModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(levelState);
@@ -51,6 +53,10 @@ export default function MaturityProgress({
     levelState === 100 && (roles.includes('GLU') || roles.includes('VLD'));
   const canRequestReevaluation =
     levelState === 202 && (roles.includes('GLU') || roles.includes('VLD'));
+  const canCancelEvaluation =
+    levelState === 200 && (roles.includes('GLU') || roles.includes('VLD'));
+  const canCancelReevaluation =
+    levelState === 203 && (roles.includes('GLU') || roles.includes('VLD'));
   const canUpdateStatus =
     [100, 101, 200, 201, 203].includes(levelState) && roles.includes('CRD');
 
@@ -121,6 +127,24 @@ export default function MaturityProgress({
               className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
             >
               Request Re-evaluation
+            </button>
+          )}
+
+          {canCancelEvaluation && (
+            <button
+              onClick={() => setShowCancelEvalModal(true)}
+              className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm"
+            >
+              Revert to In Development
+            </button>
+          )}
+
+          {canCancelReevaluation && (
+            <button
+              onClick={() => setShowCancelReevalModal(true)}
+              className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm"
+            >
+              Revert to Needs Improvements
             </button>
           )}
 
@@ -232,6 +256,64 @@ export default function MaturityProgress({
               <button
                 onClick={() => updateLevel(level, 203)}
                 className="text-sm px-3 py-1 bg-blue-600 text-white rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Evaluation Request Modal */}
+      {showCancelEvalModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-xl w-full max-w-sm">
+            <h3 className="text-lg font-semibold mb-4">
+              Revert to In Development
+            </h3>
+            <p className="text-sm mb-4">
+              Are you sure you want to revert this lab to development? This will
+              cancel the evaluation request.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowCancelEvalModal(false)}
+                className="text-sm px-3 py-1 border border-gray-400 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => updateLevel(level, 100)}
+                className="text-sm px-3 py-1 bg-red-600 text-white rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Re-evaluation Request Modal */}
+      {showCancelReevalModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-xl w-full max-w-sm">
+            <h3 className="text-lg font-semibold mb-4">
+              Revert to Needs Improvements
+            </h3>
+            <p className="text-sm mb-4">
+              Are you sure you want to revert this lab to needs improvements?
+              This will cancel the re-evaluation request.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowCancelReevalModal(false)}
+                className="text-sm px-3 py-1 border border-gray-400 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => updateLevel(level, 202)}
+                className="text-sm px-3 py-1 bg-red-600 text-white rounded"
               >
                 Confirm
               </button>
